@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema elementFormDefault="qualified" targetNamespace="http://www.vdivde.de/3682"
+    vc:minVersion="1.1" xmlns:fpb="http://www.vdivde.de/3682"
+    xmlns:visual="http://www.fpbjs.net/visual"
+    xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <xs:annotation>
+        <xs:documentation>
+            FPD Complete Schema - VDI/VDE 3682 with Visual Extension
+
+            Combines:
+            - FPD_Schema.xsd (VDI/VDE 3682 base schema)
+            - FPD_Visual_Extension.xsd (tool-specific layout attributes)
+
+            Use this schema for validating XML instances that include visual:* attributes.
+            Use FPD_Schema.xsd alone for pure standard compliance.
+        </xs:documentation>
+    </xs:annotation>
+
+    <!-- Import visual extension schema -->
+    <xs:import namespace="http://www.fpbjs.net/visual"
+               schemaLocation="FPD_Visual_Extension.xsd"/>
+
+    <!-- Include the base standard schema -->
+    <xs:include schemaLocation="FPD_Schema.xsd"/>
+
+</xs:schema>
