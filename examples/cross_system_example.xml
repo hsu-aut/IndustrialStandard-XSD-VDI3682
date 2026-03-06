@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Example: Cross-System Flows between two VDI 3682 processes.
+
+    This document demonstrates how to model interactions between two
+    independent systems (Dosing Module and Filtration) using the
+    crossSystemFlows extension.
+
+    The dosing module produces exhaust gas (P5), which flows into the
+    filtration system as input gas (P201). This cross-system connection
+    is defined at the project level using <crossSystemFlows>.
+-->
+<fpb:project xmlns:fpb="http://www.vdivde.de/3682"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.vdivde.de/3682 ../FPD_Schema.xsd">
+
+    <fpb:projectInformation entryPoint="dosing_module"/>
+
+    <!-- ============================================================ -->
+    <!-- Process 1: Dosing Module                                     -->
+    <!-- ============================================================ -->
+    <fpb:process id="dosing_module">
+        <fpb:systemLimit id="sl_dosing" name="Dosing Module v01"/>
+        <fpb:states>
+            <fpb:state stateType="product">
+                <fpb:identification uniqueIdent="P1" longName="Medium A">
+                    <fpb:references/>
+                </fpb:identification>
+                <fpb:characteristics/>
+                <fpb:assignments/>
+                <fpb:flows>
+                    <fpb:flow id="f1">
+                        <fpb:exit id="P1"/>
+                    </fpb:flow>
+                </fpb:flows>
+            </fpb:state>
+            <fpb:state stateType="product">
+                <fpb:identification uniqueIdent="P5" longName="Exhaust Gas">
+                    <fpb:references/>
+                </fpb:identification>
+                <fpb:characteristics/>
+                <fpb:assignments/>
+                <fpb:flows>
+                    <fpb:flow id="f2">
+                        <fpb:entry id="P5"/>
+                    </fpb:flow>
+                </fpb:flows>
+            </fpb:state>
+        </fpb:states>
+        <fpb:processOperators>
+            <fpb:processOperator>
+                <fpb:identification uniqueIdent="O1" longName="Storing">
+                    <fpb:references/>
+                </fpb:identification>
+                <fpb:characteristics/>
+                <fpb:assignments/>
+                <fpb:flows>
+                    <fpb:flow id="f1">
+                        <fpb:entry id="O1"/>
+                    </fpb:flow>
+                    <fpb:flow id="f2">
+                        <fpb:exit id="O1"/>
+                    </fpb:flow>
+                </fpb:flows>
+                <fpb:usages/>
+            </fpb:processOperator>
+        </fpb:processOperators>
+        <fpb:technicalResources/>
+        <fpb:flowContainer>
+            <fpb:flow id="f1" flowType="flow"/>
+            <fpb:flow id="f2" flowType="flow"/>
+        </fpb:flowContainer>
+    </fpb:process>
+
+    <!-- ============================================================ -->
+    <!-- Process 2: Filtration                                        -->
+    <!-- ============================================================ -->
+    <fpb:process id="filtration">
+        <fpb:systemLimit id="sl_filtration" name="Filtration"/>
+        <fpb:states>
+            <fpb:state stateType="product">
+                <fpb:identification uniqueIdent="P201" longName="Input Gas">
+                    <fpb:references/>
+                </fpb:identification>
+                <fpb:characteristics/>
+                <fpb:assignments/>
+                <fpb:flows>
+                    <fpb:flow id="f201">
+                        <fpb:exit id="P201"/>
+                    </fpb:flow>
+                </fpb:flows>
+            </fpb:state>
+            <fpb:state stateType="product">
+                <fpb:identification uniqueIdent="P202" longName="Filtered Gas">
+                    <fpb:references/>
+                </fpb:identification>
+                <fpb:characteristics/>
+                <fpb:assignments/>
+                <fpb:flows>
+                    <fpb:flow id="f202">
+                        <fpb:entry id="P202"/>
+                    </fpb:flow>
+                </fpb:flows>
+            </fpb:state>
+        </fpb:states>
+        <fpb:processOperators>
+            <fpb:processOperator>
+                <fpb:identification uniqueIdent="O201" longName="Filtering">
+                    <fpb:references/>
+                </fpb:identification>
+                <fpb:characteristics/>
+                <fpb:assignments/>
+                <fpb:flows>
+                    <fpb:flow id="f201">
+                        <fpb:entry id="O201"/>
+                    </fpb:flow>
+                    <fpb:flow id="f202">
+                        <fpb:exit id="O201"/>
+                    </fpb:flow>
+                </fpb:flows>
+                <fpb:usages/>
+            </fpb:processOperator>
+        </fpb:processOperators>
+        <fpb:technicalResources/>
+        <fpb:flowContainer>
+            <fpb:flow id="f201" flowType="flow"/>
+            <fpb:flow id="f202" flowType="flow"/>
+        </fpb:flowContainer>
+    </fpb:process>
+
+    <!-- ============================================================ -->
+    <!-- Cross-System Flows                                           -->
+    <!-- ============================================================ -->
+    <fpb:crossSystemFlows>
+        <!--
+            Exhaust gas from the dosing module flows into the filtration
+            system as input gas.
+        -->
+        <fpb:crossSystemFlow id="csf_1" flowType="flow"
+            sourceProcess="dosing_module" sourceState="P5"
+            targetProcess="filtration" targetState="P201"/>
+    </fpb:crossSystemFlows>
+
+</fpb:project>
