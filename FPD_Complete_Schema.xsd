@@ -22,7 +22,7 @@
     <xs:import namespace="http://www.fpbjs.net/visual"
                schemaLocation="FPD_Visual_Extension.xsd"/>
 
-    <!-- Include the base standard schema -->
+    <!-- Include the base standard schema (includes cross-system flow definitions) -->
     <xs:include schemaLocation="FPD_Schema.xsd"/>
 
 </xs:schema>

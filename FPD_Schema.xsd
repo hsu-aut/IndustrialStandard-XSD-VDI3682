@@ -8,6 +8,14 @@
             <xs:sequence>
                 <xs:element ref="fpb:projectInformation"/>
                 <xs:element maxOccurs="unbounded" minOccurs="1" ref="fpb:process"/>
+                <xs:element minOccurs="0" maxOccurs="1" ref="fpb:crossSystemFlows">
+                    <xs:annotation>
+                        <xs:documentation>
+                            Optional container for flow connections between states in
+                            different processes.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -344,6 +352,73 @@
                     </xs:complexType>
                 </xs:element>
             </xs:all>
+        </xs:complexType>
+    </xs:element>
+    <!-- Cross-System Flows (inter-process State-to-State connections) -->
+    <xs:element name="crossSystemFlows">
+        <xs:annotation>
+            <xs:documentation>
+                Container for flow connections between states in different processes.
+                Defined at the project level, outside of any individual process.
+                Each crossSystemFlow represents a directed connection from a state
+                in one process to a state in another process.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" minOccurs="1" ref="fpb:crossSystemFlow"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="crossSystemFlow">
+        <xs:annotation>
+            <xs:documentation>
+                A directed flow connection between two states in different processes.
+                The source and target are identified by a combination of process ID
+                and state ID (uniqueIdent), ensuring unambiguous resolution even when
+                different processes contain states with identical IDs.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:attribute name="id" type="xs:string" use="required">
+                <xs:annotation>
+                    <xs:documentation>Unique identifier for this cross-system flow</xs:documentation>
+                </xs:annotation>
+            </xs:attribute>
+            <xs:attribute name="flowType" type="fpb:flowType">
+                <xs:annotation>
+                    <xs:documentation>
+                        Type of flow connection. Defaults to "flow" if omitted.
+                        Only "flow", "alternativeFlow", and "parallelFlow" are
+                        semantically meaningful for cross-system connections.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:attribute>
+            <xs:attribute name="sourceProcess" type="xs:string" use="required">
+                <xs:annotation>
+                    <xs:documentation>ID of the process containing the source state (must match a process/@id)</xs:documentation>
+                </xs:annotation>
+            </xs:attribute>
+            <xs:attribute name="sourceState" type="xs:string" use="required">
+                <xs:annotation>
+                    <xs:documentation>Unique identifier of the source state within the source process</xs:documentation>
+                </xs:annotation>
+            </xs:attribute>
+            <xs:attribute name="targetProcess" type="xs:string" use="required">
+                <xs:annotation>
+                    <xs:documentation>ID of the process containing the target state (must match a process/@id, must differ from sourceProcess)</xs:documentation>
+                </xs:annotation>
+            </xs:attribute>
+            <xs:attribute name="targetState" type="xs:string" use="required">
+                <xs:annotation>
+                    <xs:documentation>Unique identifier of the target state within the target process</xs:documentation>
+                </xs:annotation>
+            </xs:attribute>
+            <xs:anyAttribute namespace="##other">
+                <xs:annotation>
+                    <xs:documentation>Allows extension attributes (e.g., visual:waypoints)</xs:documentation>
+                </xs:annotation>
+            </xs:anyAttribute>
         </xs:complexType>
     </xs:element>
     <!-- Enumerations -->
